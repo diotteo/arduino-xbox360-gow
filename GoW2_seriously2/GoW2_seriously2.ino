@@ -51,57 +51,58 @@ void setup() {
 }
 
 void loop() {
+  //Yes, load checkpoint
   pressButton("A", 60);
-  delay(10500);
+  delay(10500); //Loading...
+  
+  //Skip cinematic
   pressButton("BACK", 100);
-  pressButton("LSbtn", 50);
   delay(3000);
+  
+  //Close pop-up help
   pressButton("A", 60);
   delay(1000);
-  pressButton("RS_LEFT", 60);
+  
+  //Start walking and aiming
   setButton("LS_UP", true);
+  setButton("LT", true);
   
-  unsigned long time1 = millis();
-  unsigned long fireTime = 0;
-  unsigned long curTime;
-  boolean b_viewReset = false;
-  boolean b_continue = true;
-  boolean b_turnRight1 = true;
-  boolean b_turnRight2 = true;
-  boolean b_shootAtFeet = false;
-  boolean b_stopWalking = false;
-
-
-  while (b_continue) {
-    curTime = millis();
-    if (curTime - time1 >= 45000) {
-      b_continue = false;  
-    } else if (b_turnRight1 && curTime - time1 >= 13000) {
-      b_turnRight1 = false;
-      pressButton("RS_LEFT", 100);
-    } else if (b_turnRight2 && curTime - time1 >= 27000) {
-      b_turnRight2 = false;
-      b_shootAtFeet = true;
-      pressButton("RS_LEFT", 220);
-    } else if (!b_stopWalking && curTime - time1 >= 30000) {
-      b_stopWalking = true;
-      setButton("LS_UP", false);
-    } else if ( (!b_viewReset) && (curTime - fireTime > 5000)) {
-      b_viewReset = true;
-      pressButton("RS_UP", 500);
-      if (!b_shootAtFeet) {
-        pressButton("RS_DOWN", 350);
-      }
-    } else if (curTime - fireTime >= 6000) {
-      fireTime = millis();
-      b_viewReset = false;
-      pressButton("Y", 50);
-    }
-  }
+  //Shoot far away group (hopefully, we'll hit them)
+  pressButton("RS_LEFT", 250);
+  pressButton("RS_UP", 180);
+  delay(1000);
+  pressButton("Y", 50);
+   
+  delay(5000);
   
-  delay(4000);
+  //Shoot close group
+  pressButton("RS_RIGHT", 100);
+  pressButton("RS_UP", 500);
+  pressButton("RS_DOWN", 400);
+  delay(150);
+  setButton("Y", true);
+  setButton("RS_UP", true);
+  delay(50);
+  setButton("Y", false);
+  delay(200);
+  setButton("RS_UP", false);
+  delay(1000);
+  setButton("LS_UP", false);
+  setButton("LT", false);
+  delay(3000); //Wait for rockets to explode
+  
+  //Pause
+  pressButton("START", 100);
+  delay(1000);
+  
+  //Select 'load checkpoint'
+  pressButton("LS_DOWN", 150);
+  delay(500);
+  
+  //Load checkpoint
+  pressButton("A", 50);
+  delay(1000);
 }
-
 
 void pressButton(String btn, int holdTime) {
   setButton(btn, true);
